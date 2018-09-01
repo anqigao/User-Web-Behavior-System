@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace: path of DAO Class -->
+<mapper namespace="com.uni.dao.UserInfoDao">
+
+    <!-- select all-->
+    <select id="getTotal" resultType="int">
+        SELECT COUNT(*) FROM uinfo
+    </select>
+
+    <!-- insert one -->
+    <insert id="addInfo" parameterType="UserInfo">
+        INSERT INTO uinfo VALUES(#{id}, #{firstName}, #{lastName}, #{age})
+    </insert>
+
+    <!-- delete one -->
+    <delete id="deleteInfo" parameterType="int">
+        DELETE FROM uinfo WHERE id = #{id}
+    </delete>
+
+    <!-- update one -->
+    <update id="updateInfo" parameterType="UserInfo">
+        UPDATE uinfo SET id = #{id}, fname = #{firstName},
+        lname = #{lastName}, age = #{age} WHERE id = #{id}
+    </update>
+
+    <!-- select one -->
+    <select id="getInfo" resultMap="user" parameterType="int">
+        SELECT * FROM uinfo WHERE id = #{id}
+    </select>
+
+    <resultMap id="user" type="userInfo">
+        <id column="id" property="id"/>
+        <result column="fname" property="firstName"/>
+        <result column="lname" property="lastName"/>
+        <result column="age" property="age"/>
+    </resultMap>
+
+    <!-- select all-->
+    <select id="list" resultMap="user">
+        SELECT * FROM uinfo
+    </select>
+    
+    
+    <!-- select all records with two tables-->
+    <select id="getUser" resultMap="all">
+    	SELECT i.id, i.fname, i.lname, i.age , a.url, a.etime
+    	FROM uinfo i LEFT JOIN uactivity a on i.id=a.id
+    </select>
+    
+    <resultMap id="all" type="userInfo">
+        <id column="id" property="id"/>
+        <result column="fname" property="firstName"/>
+        <result column="lname" property="lastName"/>
+        <result column="age" property="age"/>
+        
+        <collection property="userActivity" javaType="list" ofType="userActivity">
+        	<id column="id" property="id"/>
+        	<result column="url" property="url"/>
+        	<result column="etime" property="time"/>        
+        </collection>      
+    </resultMap>
+    
+</mapper>

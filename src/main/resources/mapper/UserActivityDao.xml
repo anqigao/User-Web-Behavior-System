@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace: path of DAO Class -->
+<mapper namespace="com.uni.dao.UserActivityDao">
+
+    <!-- select all-->
+    <select id="getTotal" resultType="int">
+        SELECT COUNT(*) FROM uactivity
+    </select>
+
+    <!-- insert one -->
+    <insert id="addActivity" parameterType="UserActivity">
+        INSERT INTO uactivity VALUES(#{id}, #{url}, #{time})
+    </insert>
+
+    <!-- delete one -->
+    <delete id="deleteActivity" parameterType="int">
+        DELETE FROM uactivity WHERE id = #{id}
+    </delete>
+
+    <!-- update one -->
+    <update id="updateActivity" parameterType="UserActivity">
+        UPDATE uactivity SET id = #{id}, url = #{url},
+        etime = #{time} WHERE id = #{id}
+    </update>
+
+    <!-- select one -->
+    <select id="getActivity" resultMap="activity" parameterType="int">
+        SELECT * FROM uactivity WHERE id = #{id}
+    </select>
+
+    <resultMap id="activity" type="userActivity">
+        <id column="id" property="id"/>
+        <result column="url" property="url"/>
+        <result column="etime" property="time" javaType="java.sql.Timestamp"/>
+    </resultMap>
+
+    <!-- select all-->
+    <select id="list" resultMap="activity">
+        SELECT u.id, u.url, u.etime FROM uactivity u
+    </select>
+</mapper>
